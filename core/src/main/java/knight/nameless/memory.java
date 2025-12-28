@@ -56,7 +56,7 @@ public class memory extends ApplicationAdapter {
         String baseImagePath = "img/fruits/";
         String imageExtension = ".jpg";
 
-        String[] filenames = new String[]{
+        String[] fruits = new String[]{
             "coconut", "grapefruit", "kiwi", "lemon", "lime", "mango",
             "orange", "apple", "apricot", "avocado", "banana", "fruits",
             "grapes", "guava", "pear", "pineapple", "ume", "zakuro", "akafuzasuberry",
@@ -64,7 +64,50 @@ public class memory extends ApplicationAdapter {
             "raspberry", "strawberry", "watermelon"
         };
 
-        for (var filename : filenames) {
+        for (var filename : fruits) {
+
+            String actualImagePath = baseImagePath + filename + imageExtension;
+
+            images.add(new Texture(actualImagePath));
+        }
+
+        String[] animals = new String[]{
+            "きりん", "さる", "アリクイ", "オセロット", "カバ", "クロコダイル",
+            "ゴリラ", "シファカ", "シマウマ", "ジャガー", "ゾウ", "チーター",
+            "トラ", "バク", "パンダ", "ヒョウ", "ホワイトタイガー", "ライオン", "レッサーパンダ"
+        };
+
+        baseImagePath = "img/animals/";
+
+        for (var filename : animals) {
+
+            String actualImagePath = baseImagePath + filename + imageExtension;
+
+            images.add(new Texture(actualImagePath));
+        }
+
+        String[] colors = new String[]{
+            "あおい", "あかい", "きいろ", "くろい", "しろい", "ちゃいろ",
+            "はいいろ", "みどり", "むらさき", "オレンジ"
+        };
+
+        baseImagePath = "img/colors/";
+
+        for (var filename : colors) {
+
+            String actualImagePath = baseImagePath + filename + imageExtension;
+
+            images.add(new Texture(actualImagePath));
+        }
+
+        String[] numbers = new String[]{
+            "1", "2", "3", "4", "5", "6",
+            "7", "8", "9", "10"
+        };
+
+        baseImagePath = "img/numbers/";
+
+        for (var filename : numbers) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
 
