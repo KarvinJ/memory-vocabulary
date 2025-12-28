@@ -2,7 +2,6 @@ package knight.nameless;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -37,17 +36,34 @@ public class Memory extends ApplicationAdapter {
 
         batch = new SpriteBatch();
 
-        FileHandle[] files = Gdx.files.local("img/fruits/").list();
-
         fruits = new Array<>();
-        for(FileHandle file: files)
-            fruits.add(new Texture(file.path()));
+
+        loadTextures(fruits);
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
     }
+
+    private void loadTextures(Array<Texture> images) {
+
+        String baseImagePath = "img/fruits/";
+        String imageExtension = ".png";
+
+        String[] filenames = new String[]{
+            "coconut", "grapefruit", "kiwi", "lemon", "lime",
+            "mango", "orange"
+        };
+
+        for (var filename : filenames) {
+
+            String actualImagePath = baseImagePath + filename + imageExtension;
+
+            images.add(new Texture(actualImagePath));
+        }
+    }
+
 
     @Override
     public void render() {
