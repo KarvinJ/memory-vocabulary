@@ -3,7 +3,7 @@ package knight.nameless.gwt;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import knight.nameless.memory;
+import knight.nameless.Memory;
 
 /** Launches the GWT application. */
 public class GwtLauncher extends GwtApplication {
@@ -21,6 +21,6 @@ public class GwtLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener createApplicationListener () {
-            return new memory();
+            return new Memory();
         }
 }
