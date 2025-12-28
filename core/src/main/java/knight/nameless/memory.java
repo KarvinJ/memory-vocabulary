@@ -57,8 +57,11 @@ public class memory extends ApplicationAdapter {
         String imageExtension = ".jpg";
 
         String[] filenames = new String[]{
-            "coconut", "grapefruit", "kiwi", "lemon", "lime", "mango", "orange", "apple", "apricot", "avocado", "banana", "fruits",
-            "grapes", "guava", "pear", "pineapple", "ume", "zakuro"
+            "coconut", "grapefruit", "kiwi", "lemon", "lime", "mango",
+            "orange", "apple", "apricot", "avocado", "banana", "fruits",
+            "grapes", "guava", "pear", "pineapple", "ume", "zakuro", "akafuzasuberry",
+            "blackberry", "blueberry", "cherry", "cranberry", "gooseberry", "melon",
+            "raspberry", "strawberry", "watermelon"
         };
 
         for (var filename : filenames) {
