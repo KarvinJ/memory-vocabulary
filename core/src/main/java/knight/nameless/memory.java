@@ -54,11 +54,11 @@ public class memory extends ApplicationAdapter {
     private void loadTextures(Array<Texture> images) {
 
         String baseImagePath = "img/fruits/";
-        String imageExtension = ".png";
+        String imageExtension = ".jpg";
 
         String[] filenames = new String[]{
-            "coconut", "grapefruit", "kiwi", "lemon", "lime",
-            "mango", "orange"
+            "coconut", "grapefruit", "kiwi", "lemon", "lime", "mango", "orange", "apple", "apricot", "avocado", "banana", "fruits",
+            "grapes", "guava", "pear", "pineapple", "ume", "zakuro"
         };
 
         for (var filename : filenames) {
