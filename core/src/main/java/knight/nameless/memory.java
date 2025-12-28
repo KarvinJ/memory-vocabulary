@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
-public class Memory extends ApplicationAdapter {
+public class memory extends ApplicationAdapter {
 
     public final int SCREEN_WIDTH = 420;
     public final int SCREEN_HEIGHT = 720;

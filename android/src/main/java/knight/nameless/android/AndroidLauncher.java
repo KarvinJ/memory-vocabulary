@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import knight.nameless.Memory;
+import knight.nameless.memory;
 
 /** Launches the Android application. */
 public class AndroidLauncher extends AndroidApplication {
@@ -13,6 +13,6 @@ public class AndroidLauncher extends AndroidApplication {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
         configuration.useImmersiveMode = true; // Recommended, but not required.
-        initialize(new Memory(), configuration);
+        initialize(new memory(), configuration);
     }
 }
