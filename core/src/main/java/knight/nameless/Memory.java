@@ -23,7 +23,9 @@ public class Memory extends ApplicationAdapter {
     private ExtendViewport viewport;
     public Array<Texture> fruits;
     private int fruitIndex = 0;
-    private boolean isAnswerHidden = true;
+    private boolean isAnswerHidden = false;
+    private Texture arrowTexture;
+    private Texture checkTexture;
 
     @Override
     public void create() {
@@ -39,6 +41,9 @@ public class Memory extends ApplicationAdapter {
         fruits = new Array<>();
 
         loadTextures(fruits);
+
+        arrowTexture = new Texture("img/icons/arrow.png");
+        checkTexture = new Texture("img/icons/check.png");
     }
 
     @Override
@@ -71,18 +76,19 @@ public class Memory extends ApplicationAdapter {
         Vector3 worldCoordinates = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
         var mouseBounds = new Rectangle(worldCoordinates.x, worldCoordinates.y, 2, 2);
 
+        var checkBounds = new Rectangle(10, 10, 64, 64);
         var hideBounds = new Rectangle(20, 320, SCREEN_WIDTH - 40, 50);
-        var rightBounds = new Rectangle(20, 200, 100, 50);
-        var leftBounds = new Rectangle(SCREEN_WIDTH - 120, 200, 100, 50);
+        var leftBounds = new Rectangle(20, 150, 128, 128);
+        var rightBounds = new Rectangle(SCREEN_WIDTH - 148, 150, 128, 128);
 
-        if (Gdx.input.justTouched() && mouseBounds.overlaps(rightBounds)) {
+        if (Gdx.input.justTouched() && mouseBounds.overlaps(leftBounds)) {
 
             fruitIndex++;
 
             if (fruitIndex >= fruits.size)
                 fruitIndex = 0;
         }
-        else if (Gdx.input.justTouched() && mouseBounds.overlaps(leftBounds)) {
+        else if (Gdx.input.justTouched() && mouseBounds.overlaps(rightBounds)) {
 
             fruitIndex--;
 
@@ -97,7 +103,12 @@ public class Memory extends ApplicationAdapter {
 
         batch.setProjectionMatrix(viewport.getCamera().combined);
         batch.begin();
+
         batch.draw(fruits.get(fruitIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
+        batch.draw(arrowTexture, rightBounds.x, rightBounds.y, rightBounds.width, rightBounds.height);
+        batch.draw(arrowTexture, leftBounds.x + 128, leftBounds.y, -leftBounds.width, leftBounds.height);
+//        batch.draw(checkTexture, checkBounds.x, checkBounds.y, checkBounds.width, checkBounds.height);
+
         batch.end();
 
         shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
@@ -114,20 +125,6 @@ public class Memory extends ApplicationAdapter {
                 hideBounds.height
             );
         }
-
-        shapeRenderer.rect(
-            rightBounds.x,
-            rightBounds.y,
-            rightBounds.width,
-            rightBounds.height
-        );
-
-        shapeRenderer.rect(
-            leftBounds.x,
-            leftBounds.y,
-            leftBounds.width,
-            leftBounds.height
-        );
 
         shapeRenderer.end();
     }
