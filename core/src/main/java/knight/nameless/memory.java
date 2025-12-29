@@ -138,7 +138,6 @@ public class memory extends ApplicationAdapter {
         }
     }
 
-
     @Override
     public void render() {
 
@@ -152,10 +151,10 @@ public class memory extends ApplicationAdapter {
 
         if (gameScreen == GameScreen.MENU) {
 
-            var fruitsBounds = new Rectangle(10, SCREEN_HEIGHT - 220, 190, 190);
-            var animalsBounds = new Rectangle(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 220, 190, 190);
-//            var numbersBounds = new Rectangle(20, 150, 190, 190);
-//            var colorsBounds = new Rectangle(20, 150, 190, 190);
+            var fruitsBounds = new Rectangle(10, SCREEN_HEIGHT - 210, 190, 190);
+            var animalsBounds = new Rectangle(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 210, 190, 190);
+            var numbersBounds = new Rectangle(10, SCREEN_HEIGHT - 420, 190, 190);
+            var colorsBounds = new Rectangle(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 420, 190, 190);
 
             if (Gdx.input.justTouched() && mouseBounds.overlaps(fruitsBounds)) {
 
@@ -167,30 +166,47 @@ public class memory extends ApplicationAdapter {
                 gameScreen = GameScreen.ANIMALS;
                 maxIndex = animals.size - 1;
             }
+            else if (Gdx.input.justTouched() && mouseBounds.overlaps(numbersBounds)) {
+
+                gameScreen = GameScreen.NUMBERS;
+                maxIndex = numbers.size - 1;
+            }
+            else if (Gdx.input.justTouched() && mouseBounds.overlaps(colorsBounds)) {
+
+                gameScreen = GameScreen.COLORS;
+                maxIndex = colors.size - 1;
+            }
 
             batch.draw(fruitTexture, fruitsBounds.x, fruitsBounds.y, fruitsBounds.width, fruitsBounds.height);
             batch.draw(animalTexture, animalsBounds.x, animalsBounds.y, animalsBounds.width, animalsBounds.height);
-//            batch.draw(numberTexture, rightBounds.x, rightBounds.y, rightBounds.width, rightBounds.height);
-//            batch.draw(colorTexture, rightBounds.x, rightBounds.y, rightBounds.width, rightBounds.height);
+            batch.draw(numberTexture, numbersBounds.x, numbersBounds.y, numbersBounds.width, numbersBounds.height);
+            batch.draw(colorTexture, colorsBounds.x, colorsBounds.y, colorsBounds.width, colorsBounds.height);
 
         } else {
 
             if (gameScreen == GameScreen.FRUITS)
                 batch.draw(fruits.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
-            else
+
+            else if (gameScreen == GameScreen.ANIMALS)
                 batch.draw(animals.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
+
+            else if (gameScreen == GameScreen.NUMBERS)
+                batch.draw(numbers.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
+
+            else if (gameScreen == GameScreen.COLORS)
+                batch.draw(colors.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
 
             var leftBounds = new Rectangle(20, 150, 128, 128);
             var rightBounds = new Rectangle(SCREEN_WIDTH - 148, 150, 128, 128);
 
-            if (Gdx.input.justTouched() && mouseBounds.overlaps(leftBounds)) {
+            if (Gdx.input.justTouched() && mouseBounds.overlaps(rightBounds)) {
 
                 textureIndex++;
 
-                if (textureIndex >= maxIndex)
+                if (textureIndex > maxIndex)
                     textureIndex = 0;
             }
-            else if (Gdx.input.justTouched() && mouseBounds.overlaps(rightBounds)) {
+            else if (Gdx.input.justTouched() && mouseBounds.overlaps(leftBounds)) {
 
                 textureIndex--;
 
