@@ -14,7 +14,13 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 enum GameScreen {
-    MENU, FRUITS, ANIMALS, NUMBERS, COLORS
+    MENU,
+    FRUITS,
+    ANIMALS,
+    NUMBERS,
+    COLORS,
+    CLASSROOM,
+    VEGETABLES
 }
 
 public class memory extends ApplicationAdapter {
@@ -29,6 +35,8 @@ public class memory extends ApplicationAdapter {
     public Array<Texture> animals;
     public Array<Texture> numbers;
     public Array<Texture> colors;
+    public Array<Texture> vegetables;
+    public Array<Texture> classItems;
     private int textureIndex = 0;
     private boolean isAnswerHidden = false;
     private Texture arrowTexture;
@@ -37,6 +45,8 @@ public class memory extends ApplicationAdapter {
     private Texture animalTexture;
     private Texture numberTexture;
     private Texture colorTexture;
+    private Texture vegetableTexture;
+    private Texture classroomTexture;
     private int maxIndex = 0;
     private GameScreen gameScreen = GameScreen.MENU;
 
@@ -55,6 +65,8 @@ public class memory extends ApplicationAdapter {
         animals = new Array<>();
         numbers = new Array<>();
         colors = new Array<>();
+        vegetables = new Array<>();
+        classItems = new Array<>();
 
         loadTextures();
 
@@ -65,8 +77,12 @@ public class memory extends ApplicationAdapter {
 
         fruitTexture = new Texture("img/fruits/fruits.jpg");
         animalTexture = new Texture("img/animals/さる.jpg");
+        
         colorTexture = new Texture("img/colors/色.jpg");
         numberTexture = new Texture("img/numbers/1.jpg");
+
+        vegetableTexture = new Texture("img/vegetables/野菜-yasai.jpg");
+        classroomTexture = new Texture("img/classroom/教室のオブジェクト.jpg");
     }
 
     @Override
@@ -136,6 +152,37 @@ public class memory extends ApplicationAdapter {
 
             numbers.add(new Texture(actualImagePath));
         }
+
+        String[] vegetableNames = new String[]{
+            "かぼちゃ", "きゅうり", "じゃがいも", "たまねぎ", "だいこん", "なす",
+            "にんじん", "にんにく", "ほうれん草", "オリーブ", "カブ", "カリフラワー",
+            "コーン", "サボイキャベツ", "サラダ", "ショウガ", "ズッキーニ", "セロリ",
+            "トマト", "ビート", "ピーマン", "ブロッコリ", "ロマネスコブロッコリー"
+//            "唐辛子", "白キャベツ", "豆", "赤キャベツ"
+        };
+
+        baseImagePath = "img/vegetables/";
+
+        for (var filename : vegetableNames) {
+
+            String actualImagePath = baseImagePath + filename + imageExtension;
+
+            vegetables.add(new Texture(actualImagePath));
+        }
+
+//        String[] classRoomItems = new String[]{
+//            "1", "2", "3", "4", "5", "6",
+//            "7", "8", "9", "10"
+//        };
+//
+//        baseImagePath = "img/classroom/";
+//
+//        for (var filename : classRoomItems) {
+//
+//            String actualImagePath = baseImagePath + filename + imageExtension;
+//
+//            classItems.add(new Texture(actualImagePath));
+//        }
     }
 
     @Override
@@ -153,8 +200,12 @@ public class memory extends ApplicationAdapter {
 
             var fruitsBounds = new Rectangle(10, SCREEN_HEIGHT - 210, 190, 190);
             var animalsBounds = new Rectangle(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 210, 190, 190);
+
             var numbersBounds = new Rectangle(10, SCREEN_HEIGHT - 420, 190, 190);
             var colorsBounds = new Rectangle(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 420, 190, 190);
+
+            var vegetableBounds = new Rectangle(10, SCREEN_HEIGHT - 630, 190, 190);
+            var classroomItemsBounds = new Rectangle(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 630, 190, 190);
 
             if (Gdx.input.justTouched() && mouseBounds.overlaps(fruitsBounds)) {
 
@@ -180,25 +231,49 @@ public class memory extends ApplicationAdapter {
                 maxIndex = colors.size - 1;
                 textureIndex = 0;
             }
+            else if (Gdx.input.justTouched() && mouseBounds.overlaps(vegetableBounds)) {
+
+                gameScreen = GameScreen.VEGETABLES;
+                maxIndex = vegetables.size - 1;
+                textureIndex = 0;
+            }
+            else if (Gdx.input.justTouched() && mouseBounds.overlaps(classroomItemsBounds)) {
+
+                gameScreen = GameScreen.CLASSROOM;
+                maxIndex = classItems.size - 1;
+                textureIndex = 0;
+            }
 
             batch.draw(fruitTexture, fruitsBounds.x, fruitsBounds.y, fruitsBounds.width, fruitsBounds.height);
             batch.draw(animalTexture, animalsBounds.x, animalsBounds.y, animalsBounds.width, animalsBounds.height);
+
             batch.draw(numberTexture, numbersBounds.x, numbersBounds.y, numbersBounds.width, numbersBounds.height);
             batch.draw(colorTexture, colorsBounds.x, colorsBounds.y, colorsBounds.width, colorsBounds.height);
 
+            batch.draw(vegetableTexture, vegetableBounds.x, vegetableBounds.y, vegetableBounds.width, vegetableBounds.height);
+            batch.draw(classroomTexture, classroomItemsBounds.x, classroomItemsBounds.y, classroomItemsBounds.width, classroomItemsBounds.height);
+
         } else {
 
+            var pictureBounds = new Rectangle(10, SCREEN_HEIGHT / 2f - 50, 400, 400);
+
             if (gameScreen == GameScreen.FRUITS)
-                batch.draw(fruits.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
+                batch.draw(fruits.get(textureIndex), pictureBounds.x, pictureBounds.y, pictureBounds.width, pictureBounds.height);
 
             else if (gameScreen == GameScreen.ANIMALS)
-                batch.draw(animals.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
+                batch.draw(animals.get(textureIndex), pictureBounds.x, pictureBounds.y, pictureBounds.width, pictureBounds.height);
 
             else if (gameScreen == GameScreen.NUMBERS)
-                batch.draw(numbers.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
+                batch.draw(numbers.get(textureIndex), pictureBounds.x, pictureBounds.y, pictureBounds.width, pictureBounds.height);
 
             else if (gameScreen == GameScreen.COLORS)
-                batch.draw(colors.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
+                batch.draw(colors.get(textureIndex), pictureBounds.x, pictureBounds.y, pictureBounds.width, pictureBounds.height);
+
+            else if (gameScreen == GameScreen.VEGETABLES)
+                batch.draw(vegetables.get(textureIndex), pictureBounds.x, pictureBounds.y, pictureBounds.width, pictureBounds.height);
+
+            else if (gameScreen == GameScreen.CLASSROOM)
+                batch.draw(classItems.get(textureIndex), pictureBounds.x, pictureBounds.y, pictureBounds.width, pictureBounds.height);
 
             var leftBounds = new Rectangle(20, 150, 128, 128);
             var rightBounds = new Rectangle(SCREEN_WIDTH - 148, 150, 128, 128);
@@ -239,20 +314,20 @@ public class memory extends ApplicationAdapter {
 
             shapeRenderer.setColor(Color.WHITE);
 
-            var hideBounds = new Rectangle(20, 320, SCREEN_WIDTH - 40, 50);
-
-            if (Gdx.input.justTouched() && mouseBounds.overlaps(hideBounds))
-                isAnswerHidden = !isAnswerHidden;
-
-            if (isAnswerHidden) {
-
-                shapeRenderer.rect(
-                    hideBounds.x,
-                    hideBounds.y,
-                    hideBounds.width,
-                    hideBounds.height
-                );
-            }
+//            var hideBounds = new Rectangle(20, 320, SCREEN_WIDTH - 40, 50);
+//
+//            if (Gdx.input.justTouched() && mouseBounds.overlaps(hideBounds))
+//                isAnswerHidden = !isAnswerHidden;
+//
+//            if (isAnswerHidden) {
+//
+//                shapeRenderer.rect(
+//                    hideBounds.x,
+//                    hideBounds.y,
+//                    hideBounds.width,
+//                    hideBounds.height
+//                );
+//            }
 
             shapeRenderer.end();
         }
