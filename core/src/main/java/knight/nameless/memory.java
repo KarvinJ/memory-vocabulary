@@ -13,6 +13,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+enum GameScreen {
+    MENU, FRUITS, ANIMALS, NUMBERS, COLORS
+}
+
 public class memory extends ApplicationAdapter {
 
     public final int SCREEN_WIDTH = 420;
@@ -29,13 +33,12 @@ public class memory extends ApplicationAdapter {
     private boolean isAnswerHidden = false;
     private Texture arrowTexture;
     private Texture checkTexture;
-    private boolean isMenuScreen = true;
-    private boolean isFruitScreen = false;
     private Texture fruitTexture;
     private Texture animalTexture;
     private Texture numberTexture;
     private Texture colorTexture;
     private int maxIndex = 0;
+    private GameScreen gameScreen = GameScreen.MENU;
 
     @Override
     public void create() {
@@ -142,35 +145,12 @@ public class memory extends ApplicationAdapter {
         Vector3 worldCoordinates = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
         var mouseBounds = new Rectangle(worldCoordinates.x, worldCoordinates.y, 2, 2);
 
-        var checkBounds = new Rectangle(10, 10, 64, 64);
-        var hideBounds = new Rectangle(20, 320, SCREEN_WIDTH - 40, 50);
-        var leftBounds = new Rectangle(20, 150, 128, 128);
-        var rightBounds = new Rectangle(SCREEN_WIDTH - 148, 150, 128, 128);
-
-        if (Gdx.input.justTouched() && mouseBounds.overlaps(leftBounds)) {
-
-            textureIndex++;
-
-            if (textureIndex >= maxIndex)
-                textureIndex = 0;
-        }
-        else if (Gdx.input.justTouched() && mouseBounds.overlaps(rightBounds)) {
-
-            textureIndex--;
-
-            if (textureIndex < 0)
-                textureIndex = maxIndex;
-        }
-
-        else if (Gdx.input.justTouched() && mouseBounds.overlaps(hideBounds))
-            isAnswerHidden = !isAnswerHidden;
-
         ScreenUtils.clear(Color.DARK_GRAY);
 
         batch.setProjectionMatrix(viewport.getCamera().combined);
         batch.begin();
 
-        if (isMenuScreen) {
+        if (gameScreen == GameScreen.MENU) {
 
             var fruitsBounds = new Rectangle(10, SCREEN_HEIGHT - 220, 190, 190);
             var animalsBounds = new Rectangle(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 220, 190, 190);
@@ -179,14 +159,12 @@ public class memory extends ApplicationAdapter {
 
             if (Gdx.input.justTouched() && mouseBounds.overlaps(fruitsBounds)) {
 
-                isFruitScreen = true;
-                isMenuScreen = false;
+                gameScreen = GameScreen.FRUITS;
                 maxIndex = fruits.size - 1;
             }
             else if (Gdx.input.justTouched() && mouseBounds.overlaps(animalsBounds)) {
 
-                isFruitScreen = false;
-                isMenuScreen = false;
+                gameScreen = GameScreen.ANIMALS;
                 maxIndex = animals.size - 1;
             }
 
@@ -197,35 +175,67 @@ public class memory extends ApplicationAdapter {
 
         } else {
 
-            if (isFruitScreen)
+            if (gameScreen == GameScreen.FRUITS)
                 batch.draw(fruits.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
             else
                 batch.draw(animals.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
 
+            var leftBounds = new Rectangle(20, 150, 128, 128);
+            var rightBounds = new Rectangle(SCREEN_WIDTH - 148, 150, 128, 128);
+
+            if (Gdx.input.justTouched() && mouseBounds.overlaps(leftBounds)) {
+
+                textureIndex++;
+
+                if (textureIndex >= maxIndex)
+                    textureIndex = 0;
+            }
+            else if (Gdx.input.justTouched() && mouseBounds.overlaps(rightBounds)) {
+
+                textureIndex--;
+
+                if (textureIndex < 0)
+                    textureIndex = maxIndex;
+            }
+
             batch.draw(arrowTexture, rightBounds.x, rightBounds.y, rightBounds.width, rightBounds.height);
             batch.draw(arrowTexture, leftBounds.x + 128, leftBounds.y, -leftBounds.width, leftBounds.height);
-//        batch.draw(checkTexture, checkBounds.x, checkBounds.y, checkBounds.width, checkBounds.height);
-        }
+            batch.draw(arrowTexture, leftBounds.x + 128, leftBounds.y, -leftBounds.width, leftBounds.height);
 
+            var checkBounds = new Rectangle(10, 10, 64, 64);
+
+            if (Gdx.input.justTouched() && mouseBounds.overlaps(checkBounds))
+                gameScreen = GameScreen.MENU;
+
+            batch.draw(checkTexture, checkBounds.x, checkBounds.y, checkBounds.width, checkBounds.height);
+        }
 
         batch.end();
 
-        shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        if (gameScreen != GameScreen.MENU) {
 
-        shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        if (!isMenuScreen && isAnswerHidden) {
+            shapeRenderer.setColor(Color.WHITE);
 
-            shapeRenderer.rect(
-                hideBounds.x,
-                hideBounds.y,
-                hideBounds.width,
-                hideBounds.height
-            );
+            var hideBounds = new Rectangle(20, 320, SCREEN_WIDTH - 40, 50);
+
+            if (Gdx.input.justTouched() && mouseBounds.overlaps(hideBounds))
+                isAnswerHidden = !isAnswerHidden;
+
+            if (isAnswerHidden) {
+
+                shapeRenderer.rect(
+                    hideBounds.x,
+                    hideBounds.y,
+                    hideBounds.width,
+                    hideBounds.height
+                );
+            }
+
+            shapeRenderer.end();
         }
-
-        shapeRenderer.end();
     }
 
     @Override
