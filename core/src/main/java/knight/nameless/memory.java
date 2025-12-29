@@ -215,28 +215,23 @@ public class memory extends ApplicationAdapter {
 
                 gameScreen = GameScreen.FRUITS;
                 maxIndex = fruits.size - 1;
-            }
-            else if (Gdx.input.justTouched() && mouseBounds.overlaps(animalsBounds)) {
+            } else if (Gdx.input.justTouched() && mouseBounds.overlaps(animalsBounds)) {
 
                 gameScreen = GameScreen.ANIMALS;
                 maxIndex = animals.size - 1;
-            }
-            else if (Gdx.input.justTouched() && mouseBounds.overlaps(numbersBounds)) {
+            } else if (Gdx.input.justTouched() && mouseBounds.overlaps(numbersBounds)) {
 
                 gameScreen = GameScreen.NUMBERS;
                 maxIndex = numbers.size - 1;
-            }
-            else if (Gdx.input.justTouched() && mouseBounds.overlaps(colorsBounds)) {
+            } else if (Gdx.input.justTouched() && mouseBounds.overlaps(colorsBounds)) {
 
                 gameScreen = GameScreen.COLORS;
                 maxIndex = colors.size - 1;
-            }
-            else if (Gdx.input.justTouched() && mouseBounds.overlaps(vegetableBounds)) {
+            } else if (Gdx.input.justTouched() && mouseBounds.overlaps(vegetableBounds)) {
 
                 gameScreen = GameScreen.VEGETABLES;
                 maxIndex = vegetables.size - 1;
-            }
-            else if (Gdx.input.justTouched() && mouseBounds.overlaps(classroomItemsBounds)) {
+            } else if (Gdx.input.justTouched() && mouseBounds.overlaps(classroomItemsBounds)) {
 
                 gameScreen = GameScreen.CLASSROOM;
                 maxIndex = classItems.size - 1;
@@ -282,8 +277,7 @@ public class memory extends ApplicationAdapter {
 
                 if (textureIndex > maxIndex)
                     textureIndex = 0;
-            }
-            else if (Gdx.input.justTouched() && mouseBounds.overlaps(leftBounds)) {
+            } else if (Gdx.input.justTouched() && mouseBounds.overlaps(leftBounds)) {
 
                 textureIndex--;
 
@@ -341,6 +335,26 @@ public class memory extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+
         batch.dispose();
+        shapeRenderer.dispose();
+
+        fruits.forEach(Texture::dispose);
+        animals.forEach(Texture::dispose);
+        numbers.forEach(Texture::dispose);
+        colors.forEach(Texture::dispose);
+        vegetables.forEach(Texture::dispose);
+        classItems.forEach(Texture::dispose);
+
+        arrowTexture.dispose();
+        goBackTexture.dispose();
+        showTexture.dispose();
+        hiddenTexture.dispose();
+        fruitTexture.dispose();
+        animalTexture.dispose();
+        numberTexture.dispose();
+        colorTexture.dispose();
+        vegetableTexture.dispose();
+        classroomTexture.dispose();
     }
 }
