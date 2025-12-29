@@ -22,10 +22,20 @@ public class memory extends ApplicationAdapter {
     public OrthographicCamera camera;
     private ExtendViewport viewport;
     public Array<Texture> fruits;
-    private int fruitIndex = 0;
+    public Array<Texture> animals;
+    public Array<Texture> numbers;
+    public Array<Texture> colors;
+    private int textureIndex = 0;
     private boolean isAnswerHidden = false;
     private Texture arrowTexture;
     private Texture checkTexture;
+    private boolean isMenuScreen = true;
+    private boolean isFruitScreen = false;
+    private Texture fruitTexture;
+    private Texture animalTexture;
+    private Texture numberTexture;
+    private Texture colorTexture;
+    private int maxIndex = 0;
 
     @Override
     public void create() {
@@ -39,11 +49,21 @@ public class memory extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         fruits = new Array<>();
+        animals = new Array<>();
+        numbers = new Array<>();
+        colors = new Array<>();
 
-        loadTextures(fruits);
+        loadTextures();
+
+        maxIndex = fruits.size - 1;
 
         arrowTexture = new Texture("img/icons/arrow.png");
         checkTexture = new Texture("img/icons/check.png");
+
+        fruitTexture = new Texture("img/fruits/fruits.jpg");
+        animalTexture = new Texture("img/animals/さる.jpg");
+        colorTexture = new Texture("img/colors/色.jpg");
+        numberTexture = new Texture("img/numbers/1.jpg");
     }
 
     @Override
@@ -51,12 +71,12 @@ public class memory extends ApplicationAdapter {
         viewport.update(width, height);
     }
 
-    private void loadTextures(Array<Texture> images) {
+    private void loadTextures() {
 
         String baseImagePath = "img/fruits/";
         String imageExtension = ".jpg";
 
-        String[] fruits = new String[]{
+        String[] fruitNames = new String[]{
             "coconut", "grapefruit", "kiwi", "lemon", "lime", "mango",
             "orange", "apple", "apricot", "avocado", "banana", "fruits",
             "grapes", "guava", "pear", "pineapple", "ume", "zakuro", "akafuzasuberry",
@@ -64,14 +84,14 @@ public class memory extends ApplicationAdapter {
             "raspberry", "strawberry", "watermelon"
         };
 
-        for (var filename : fruits) {
+        for (var filename : fruitNames) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
 
-            images.add(new Texture(actualImagePath));
+            fruits.add(new Texture(actualImagePath));
         }
 
-        String[] animals = new String[]{
+        String[] animalNames = new String[]{
             "きりん", "さる", "アリクイ", "オセロット", "カバ", "クロコダイル",
             "ゴリラ", "シファカ", "シマウマ", "ジャガー", "ゾウ", "チーター",
             "トラ", "バク", "パンダ", "ヒョウ", "ホワイトタイガー", "ライオン", "レッサーパンダ"
@@ -79,39 +99,39 @@ public class memory extends ApplicationAdapter {
 
         baseImagePath = "img/animals/";
 
-        for (var filename : animals) {
+        for (var filename : animalNames) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
 
-            images.add(new Texture(actualImagePath));
+            animals.add(new Texture(actualImagePath));
         }
 
-        String[] colors = new String[]{
+        String[] colorNames = new String[]{
             "あおい", "あかい", "きいろ", "くろい", "しろい", "ちゃいろ",
             "はいいろ", "みどり", "むらさき", "オレンジ"
         };
 
         baseImagePath = "img/colors/";
 
-        for (var filename : colors) {
+        for (var filename : colorNames) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
 
-            images.add(new Texture(actualImagePath));
+            colors.add(new Texture(actualImagePath));
         }
 
-        String[] numbers = new String[]{
+        String[] numberNames = new String[]{
             "1", "2", "3", "4", "5", "6",
             "7", "8", "9", "10"
         };
 
         baseImagePath = "img/numbers/";
 
-        for (var filename : numbers) {
+        for (var filename : numberNames) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
 
-            images.add(new Texture(actualImagePath));
+            numbers.add(new Texture(actualImagePath));
         }
     }
 
@@ -129,17 +149,17 @@ public class memory extends ApplicationAdapter {
 
         if (Gdx.input.justTouched() && mouseBounds.overlaps(leftBounds)) {
 
-            fruitIndex++;
+            textureIndex++;
 
-            if (fruitIndex >= fruits.size)
-                fruitIndex = 0;
+            if (textureIndex >= maxIndex)
+                textureIndex = 0;
         }
         else if (Gdx.input.justTouched() && mouseBounds.overlaps(rightBounds)) {
 
-            fruitIndex--;
+            textureIndex--;
 
-            if (fruitIndex < 0)
-                fruitIndex = fruits.size - 1;
+            if (textureIndex < 0)
+                textureIndex = maxIndex;
         }
 
         else if (Gdx.input.justTouched() && mouseBounds.overlaps(hideBounds))
@@ -150,10 +170,43 @@ public class memory extends ApplicationAdapter {
         batch.setProjectionMatrix(viewport.getCamera().combined);
         batch.begin();
 
-        batch.draw(fruits.get(fruitIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
-        batch.draw(arrowTexture, rightBounds.x, rightBounds.y, rightBounds.width, rightBounds.height);
-        batch.draw(arrowTexture, leftBounds.x + 128, leftBounds.y, -leftBounds.width, leftBounds.height);
+        if (isMenuScreen) {
+
+            var fruitsBounds = new Rectangle(10, SCREEN_HEIGHT - 220, 190, 190);
+            var animalsBounds = new Rectangle(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 220, 190, 190);
+//            var numbersBounds = new Rectangle(20, 150, 190, 190);
+//            var colorsBounds = new Rectangle(20, 150, 190, 190);
+
+            if (Gdx.input.justTouched() && mouseBounds.overlaps(fruitsBounds)) {
+
+                isFruitScreen = true;
+                isMenuScreen = false;
+                maxIndex = fruits.size - 1;
+            }
+            else if (Gdx.input.justTouched() && mouseBounds.overlaps(animalsBounds)) {
+
+                isFruitScreen = false;
+                isMenuScreen = false;
+                maxIndex = animals.size - 1;
+            }
+
+            batch.draw(fruitTexture, fruitsBounds.x, fruitsBounds.y, fruitsBounds.width, fruitsBounds.height);
+            batch.draw(animalTexture, animalsBounds.x, animalsBounds.y, animalsBounds.width, animalsBounds.height);
+//            batch.draw(numberTexture, rightBounds.x, rightBounds.y, rightBounds.width, rightBounds.height);
+//            batch.draw(colorTexture, rightBounds.x, rightBounds.y, rightBounds.width, rightBounds.height);
+
+        } else {
+
+            if (isFruitScreen)
+                batch.draw(fruits.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
+            else
+                batch.draw(animals.get(textureIndex), 10, SCREEN_HEIGHT / 2f - 50, 400, 400);
+
+            batch.draw(arrowTexture, rightBounds.x, rightBounds.y, rightBounds.width, rightBounds.height);
+            batch.draw(arrowTexture, leftBounds.x + 128, leftBounds.y, -leftBounds.width, leftBounds.height);
 //        batch.draw(checkTexture, checkBounds.x, checkBounds.y, checkBounds.width, checkBounds.height);
+        }
+
 
         batch.end();
 
@@ -162,7 +215,7 @@ public class memory extends ApplicationAdapter {
 
         shapeRenderer.setColor(Color.WHITE);
 
-        if (isAnswerHidden) {
+        if (!isMenuScreen && isAnswerHidden) {
 
             shapeRenderer.rect(
                 hideBounds.x,
