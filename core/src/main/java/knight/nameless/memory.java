@@ -77,7 +77,7 @@ public class memory extends ApplicationAdapter {
 
         fruitTexture = new Texture("img/fruits/fruits.jpg");
         animalTexture = new Texture("img/animals/さる.jpg");
-        
+
         colorTexture = new Texture("img/colors/色.jpg");
         numberTexture = new Texture("img/numbers/1.jpg");
 
@@ -170,19 +170,22 @@ public class memory extends ApplicationAdapter {
             vegetables.add(new Texture(actualImagePath));
         }
 
-//        String[] classRoomItems = new String[]{
-//            "1", "2", "3", "4", "5", "6",
-//            "7", "8", "9", "10"
-//        };
-//
-//        baseImagePath = "img/classroom/";
-//
-//        for (var filename : classRoomItems) {
-//
-//            String actualImagePath = baseImagePath + filename + imageExtension;
-//
-//            classItems.add(new Texture(actualImagePath));
-//        }
+        String[] classRoomItems = new String[]{
+            "えんぴつ", "えんぴつけずり", "おべんと", "かみ", "がっこう", "けしゴム",
+            "けんびきょう", "こくばん", "こんぱす", "じかんわり", "じょぎ", "せいと",
+            "せんせい", "そろばん", "ちきゅうぎ", "ちょーく", "つくえ--いす", "でんたく",
+            "のり", "のーと", "はさみ", "ばす", "ふでいれ", "ぶんどき", "ぺん", "ほん",
+            "ほんだな", "まーかー", "らんどせる", "ウィトボード", "コンピューター", "パスコン", "マーカー"
+        };
+
+        baseImagePath = "img/classroom/";
+
+        for (var filename : classRoomItems) {
+
+            String actualImagePath = baseImagePath + filename + imageExtension;
+
+            classItems.add(new Texture(actualImagePath));
+        }
     }
 
     @Override
