@@ -160,21 +160,25 @@ public class memory extends ApplicationAdapter {
 
                 gameScreen = GameScreen.FRUITS;
                 maxIndex = fruits.size - 1;
+                textureIndex = 0;
             }
             else if (Gdx.input.justTouched() && mouseBounds.overlaps(animalsBounds)) {
 
                 gameScreen = GameScreen.ANIMALS;
                 maxIndex = animals.size - 1;
+                textureIndex = 0;
             }
             else if (Gdx.input.justTouched() && mouseBounds.overlaps(numbersBounds)) {
 
                 gameScreen = GameScreen.NUMBERS;
                 maxIndex = numbers.size - 1;
+                textureIndex = 0;
             }
             else if (Gdx.input.justTouched() && mouseBounds.overlaps(colorsBounds)) {
 
                 gameScreen = GameScreen.COLORS;
                 maxIndex = colors.size - 1;
+                textureIndex = 0;
             }
 
             batch.draw(fruitTexture, fruitsBounds.x, fruitsBounds.y, fruitsBounds.width, fruitsBounds.height);
