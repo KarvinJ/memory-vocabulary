@@ -38,9 +38,11 @@ public class memory extends ApplicationAdapter {
     public Array<Texture> vegetables;
     public Array<Texture> classItems;
     private int textureIndex = 0;
-    private boolean isAnswerHidden = false;
+    private boolean shouldShowAnswer = true;
     private Texture arrowTexture;
-    private Texture checkTexture;
+    private Texture goBackTexture;
+    private Texture showTexture;
+    private Texture hiddenTexture;
     private Texture fruitTexture;
     private Texture animalTexture;
     private Texture numberTexture;
@@ -73,7 +75,10 @@ public class memory extends ApplicationAdapter {
         maxIndex = fruits.size - 1;
 
         arrowTexture = new Texture("img/icons/arrow.png");
-        checkTexture = new Texture("img/icons/check.png");
+        goBackTexture = new Texture("img/icons/back.png");
+
+        showTexture = new Texture("img/icons/show.png");
+        hiddenTexture = new Texture("img/icons/hidden.png");
 
         fruitTexture = new Texture("img/fruits/fruits.jpg");
         animalTexture = new Texture("img/animals/さる.jpg");
@@ -106,7 +111,6 @@ public class memory extends ApplicationAdapter {
         for (var filename : fruitNames) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
-
             fruits.add(new Texture(actualImagePath));
         }
 
@@ -121,7 +125,6 @@ public class memory extends ApplicationAdapter {
         for (var filename : animalNames) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
-
             animals.add(new Texture(actualImagePath));
         }
 
@@ -135,7 +138,6 @@ public class memory extends ApplicationAdapter {
         for (var filename : colorNames) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
-
             colors.add(new Texture(actualImagePath));
         }
 
@@ -149,7 +151,6 @@ public class memory extends ApplicationAdapter {
         for (var filename : numberNames) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
-
             numbers.add(new Texture(actualImagePath));
         }
 
@@ -166,7 +167,6 @@ public class memory extends ApplicationAdapter {
         for (var filename : vegetableNames) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
-
             vegetables.add(new Texture(actualImagePath));
         }
 
@@ -183,7 +183,6 @@ public class memory extends ApplicationAdapter {
         for (var filename : classRoomItems) {
 
             String actualImagePath = baseImagePath + filename + imageExtension;
-
             classItems.add(new Texture(actualImagePath));
         }
     }
@@ -193,6 +192,8 @@ public class memory extends ApplicationAdapter {
 
         Vector3 worldCoordinates = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
         var mouseBounds = new Rectangle(worldCoordinates.x, worldCoordinates.y, 2, 2);
+
+        var showAndHideBounds = new Rectangle(SCREEN_WIDTH - 84, 10, 64, 64);
 
         ScreenUtils.clear(Color.DARK_GRAY);
 
@@ -214,37 +215,31 @@ public class memory extends ApplicationAdapter {
 
                 gameScreen = GameScreen.FRUITS;
                 maxIndex = fruits.size - 1;
-                textureIndex = 0;
             }
             else if (Gdx.input.justTouched() && mouseBounds.overlaps(animalsBounds)) {
 
                 gameScreen = GameScreen.ANIMALS;
                 maxIndex = animals.size - 1;
-                textureIndex = 0;
             }
             else if (Gdx.input.justTouched() && mouseBounds.overlaps(numbersBounds)) {
 
                 gameScreen = GameScreen.NUMBERS;
                 maxIndex = numbers.size - 1;
-                textureIndex = 0;
             }
             else if (Gdx.input.justTouched() && mouseBounds.overlaps(colorsBounds)) {
 
                 gameScreen = GameScreen.COLORS;
                 maxIndex = colors.size - 1;
-                textureIndex = 0;
             }
             else if (Gdx.input.justTouched() && mouseBounds.overlaps(vegetableBounds)) {
 
                 gameScreen = GameScreen.VEGETABLES;
                 maxIndex = vegetables.size - 1;
-                textureIndex = 0;
             }
             else if (Gdx.input.justTouched() && mouseBounds.overlaps(classroomItemsBounds)) {
 
                 gameScreen = GameScreen.CLASSROOM;
                 maxIndex = classItems.size - 1;
-                textureIndex = 0;
             }
 
             batch.draw(fruitTexture, fruitsBounds.x, fruitsBounds.y, fruitsBounds.width, fruitsBounds.height);
@@ -298,14 +293,22 @@ public class memory extends ApplicationAdapter {
 
             batch.draw(arrowTexture, rightBounds.x, rightBounds.y, rightBounds.width, rightBounds.height);
             batch.draw(arrowTexture, leftBounds.x + 128, leftBounds.y, -leftBounds.width, leftBounds.height);
-            batch.draw(arrowTexture, leftBounds.x + 128, leftBounds.y, -leftBounds.width, leftBounds.height);
 
-            var checkBounds = new Rectangle(10, 10, 64, 64);
+            var checkBounds = new Rectangle(20, 10, 64, 64);
 
-            if (Gdx.input.justTouched() && mouseBounds.overlaps(checkBounds))
+            if (Gdx.input.justTouched() && mouseBounds.overlaps(checkBounds)) {
+
                 gameScreen = GameScreen.MENU;
+                textureIndex = 0;
+                shouldShowAnswer = true;
+            }
 
-            batch.draw(checkTexture, checkBounds.x, checkBounds.y, checkBounds.width, checkBounds.height);
+            batch.draw(goBackTexture, checkBounds.x, checkBounds.y, checkBounds.width, checkBounds.height);
+
+            if (shouldShowAnswer)
+                batch.draw(showTexture, showAndHideBounds.x, showAndHideBounds.y, showAndHideBounds.width, showAndHideBounds.height);
+            else
+                batch.draw(hiddenTexture, showAndHideBounds.x, showAndHideBounds.y, showAndHideBounds.width, showAndHideBounds.height);
         }
 
         batch.end();
@@ -317,20 +320,20 @@ public class memory extends ApplicationAdapter {
 
             shapeRenderer.setColor(Color.WHITE);
 
-//            var hideBounds = new Rectangle(20, 320, SCREEN_WIDTH - 40, 50);
-//
-//            if (Gdx.input.justTouched() && mouseBounds.overlaps(hideBounds))
-//                isAnswerHidden = !isAnswerHidden;
-//
-//            if (isAnswerHidden) {
-//
-//                shapeRenderer.rect(
-//                    hideBounds.x,
-//                    hideBounds.y,
-//                    hideBounds.width,
-//                    hideBounds.height
-//                );
-//            }
+            var hideBounds = new Rectangle(20, 320, SCREEN_WIDTH - 40, 65);
+
+            if (Gdx.input.justTouched() && mouseBounds.overlaps(showAndHideBounds))
+                shouldShowAnswer = !shouldShowAnswer;
+
+            if (!shouldShowAnswer) {
+
+                shapeRenderer.rect(
+                    hideBounds.x,
+                    hideBounds.y,
+                    hideBounds.width,
+                    hideBounds.height
+                );
+            }
 
             shapeRenderer.end();
         }
